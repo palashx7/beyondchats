@@ -6,20 +6,31 @@ function App() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/articles")
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch");
-        return res.json();
-      })
-      .then((data) => {
-        setArticles(data);
-        setLoading(false);
-      })
-      .catch(() => {
+  const fetchArticles = async (attempts = 3) => {
+    try {
+      const res = await fetch(
+        "https://beyondchats-uvjy.onrender.com/api/articles",
+        { cache: "no-store" }
+      );
+
+      if (!res.ok) throw new Error("Failed to fetch");
+
+      const data = await res.json();
+      setArticles(data);
+      setLoading(false);
+    } catch (err) {
+      if (attempts > 1) {
+        setTimeout(() => fetchArticles(attempts - 1), 1500);
+      } else {
         setError("Could not load articles");
         setLoading(false);
-      });
-  }, []);
+      }
+    }
+  };
+
+  fetchArticles();
+}, []);
+
 
   if (loading) {
     return <p style={{ padding: 20 }}>Loading articles...</p>;
