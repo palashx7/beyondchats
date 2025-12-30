@@ -81,6 +81,13 @@ beyondchats/
 - Nodemon
 
 
+## 🧪 Local Development Notes
+
+- Backend runs on port 5000
+- Frontend expects backend at `/api/articles`
+- Cold-start retry logic implemented for cloud deployments
+
+
 
 ## ⚙️ Backend
 
